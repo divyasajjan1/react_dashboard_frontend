@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import './PlayerTable.css';
 
-function PlayerTable() {
-  const [teamDC, setTeamDC] = useState([]);
-  const [teamMarvel, setTeamMarvel] = useState([]);
+function PlayerTable({ teamDC, teamMarvel, refreshTeams })  {
 
   const [newDCPlayer, setNewDCPlayer] = useState({
     player_name: "",
@@ -19,19 +17,8 @@ function PlayerTable() {
     player_matches_played: ""
   });
 
-  useEffect(() => {
-    fetchTeams();
-  }, []);
-
-  const fetchTeams = () => {
-    fetch("http://localhost:8000/teamdc")
-      .then(res => res.json())
-      .then(data => setTeamDC(data));
-
-    fetch("http://localhost:8000/teammarvel")
-      .then(res => res.json())
-      .then(data => setTeamMarvel(data));
-  }
+  // REMOVE this line:
+  // refreshTeams();
 
   const handleInputChange = (e, team) => {
     const { name, value } = e.target;
@@ -58,7 +45,8 @@ function PlayerTable() {
     })
     .then(res => res.json())
     .then(data => {
-      fetchTeams();
+      // REPLACE fetchTeams() with refreshTeams()
+      refreshTeams();
       team === "DC" 
         ? setNewDCPlayer({ player_name: "", player_height: "", player_weight: "", player_matches_played: "" })
         : setNewMarvelPlayer({ player_name: "", player_height: "", player_weight: "", player_matches_played: "" });
@@ -68,7 +56,6 @@ function PlayerTable() {
 
   const renderTeam = (teamName, teamData, newPlayer, teamKey) => (
     <div className="team-container">
-      {/* Form title */}
       <h3>Add new player</h3>
       <form className="add-player-form" onSubmit={(e) => handleSubmit(e, teamKey)}>
         <div className="input-fields">
@@ -105,8 +92,6 @@ function PlayerTable() {
         <button type="submit">Add Player</button>
       </form>
 
-
-      {/* Table title */}
       <h2>{teamName}</h2>
       <table>
         <thead>

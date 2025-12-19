@@ -1,13 +1,8 @@
-import React from 'react';
-import './App.css';
-import PlayerTable from './PlayerTable';
+import React from "react";
+import Dashboard from "./components/Dashboard";
 
 function App() {
-  return (
-    <div className="App">
-      <PlayerTable />
-    </div>
-  );
+  return <Dashboard />;
 }
 
 export default App;
