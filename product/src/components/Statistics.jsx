@@ -19,6 +19,36 @@ ChartJS.register(
   Legend
 );
 
+const format2Decimals = (value) => {
+  if (value === null || value === undefined) return "0.00";
+  return Number(value).toFixed(2);
+};
+
+const options = {
+        responsive: true,
+        plugins: {
+            tooltip: {
+            callbacks: {
+                label: (context) => {
+                const label = context.dataset.label || "";
+                return `${label}: ${format2Decimals(context.raw)}`;
+                }
+            }
+            },
+            legend: {
+            display: true
+            }
+        },
+        scales: {
+            y: {
+            ticks: {
+                callback: (value) => format2Decimals(value)
+            }
+            }
+        }
+    };
+
+
 /* ----------------- Helper math functions ----------------- */
 
 function median(values) {
@@ -106,18 +136,32 @@ function TeamStats({ teamName, stats }) {
     ]
   };
 
-  const options = {
-    responsive: true,
-    plugins: { legend: { display: true } }
-  };
-
   return (
     <div className="team-stats">
       <h2>{teamName}</h2>
-      <p>Total Players: {stats.totalPlayers}</p>
-      <p>Avg Height: {stats.avgHeight.toFixed(1)}</p>
-      <p>Avg Weight: {stats.avgWeight.toFixed(1)}</p>
-      <p>Avg Matches Played: {stats.avgMatches.toFixed(1)}</p>
+      {/* <p>Total Players: {stats.totalPlayers}</p>
+      <p>Avg Height: {stats.avgHeight.toFixed(2)}</p>
+      <p>Avg Weight: {stats.avgWeight.toFixed(2)}</p>
+      <p>Avg Matches Played: {stats.avgMatches.toFixed(2)}</p> */}
+      <div className="stats-cards">
+        <div className="stat-card">
+            <h4>Total Players</h4>
+            <p>{stats.totalPlayers}</p>
+        </div>
+        <div className="stat-card">
+            <h4>Avg Height</h4>
+            <p>{stats.avgHeight.toFixed(2)}</p>
+        </div>
+        <div className="stat-card">
+            <h4>Avg Weight</h4>
+            <p>{stats.avgWeight.toFixed(2)}</p>
+        </div>
+        <div className="stat-card">
+            <h4>Avg Matches</h4>
+            <p>{stats.avgMatches.toFixed(2)}</p>
+        </div>
+      </div>
+
 
       <div className="charts-wrapper">
         <div>
@@ -170,14 +214,22 @@ function Statistics({ teamDC = [], teamMarvel = [] }) {
   };
 
   return (
-    <div className="stats-wrapper">
-      <TeamStats teamName="Team DC" stats={dcStats} />
-      <TeamStats teamName="Team Marvel" stats={marvelStats} />
+    <div className="stats-page">
 
-      <div className="team-stats">
-        <h2>Team Comparison</h2>
-        <Bar data={comparisonData} />
-      </div>
+        {/* Row 1: DC + Marvel */}
+        <div className="stats-row">
+        <TeamStats teamName="Team DC" stats={dcStats} />
+        <TeamStats teamName="Team Marvel" stats={marvelStats} />
+        </div>
+
+        {/* Row 2: Comparison */}
+        <div className="stats-row">
+        <div className="team-stats comparison">
+            <h2>Team Comparison</h2>
+            <Bar data={comparisonData} options={options} />
+        </div>
+        </div>
+
     </div>
   );
 }
