@@ -38,7 +38,7 @@ function PlayerTable({ teamDC, teamMarvel, refreshTeams })  {
       return;
     }
 
-    fetch(team === "DC" ? "http://localhost:8000/teamdc" : "http://localhost:8000/teammarvel", {
+    fetch(team === "DC" ? "http://localhost:8000/teamdc/" : "http://localhost:8000/teammarvel/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
