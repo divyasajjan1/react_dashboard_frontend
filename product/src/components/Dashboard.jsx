@@ -22,7 +22,7 @@ function Dashboard() {
 
   useEffect(() => {
     fetchTeams();
-    const intervalId = setInterval(fetchTeams, 2000); // every 2 seconds
+    const intervalId = setInterval(fetchTeams, 5000); // every 5 seconds
 
     return () => clearInterval(intervalId);
   }, []);
